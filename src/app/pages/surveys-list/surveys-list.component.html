@@ -1,0 +1,31 @@
+<div class="container py-4">
+  <h1>All Surveys</h1>
+
+  <a routerLink="/survey" class="btn btn-primary mb-3">+ New Survey</a>
+
+  <table class="table table-bordered" *ngIf="!loading && rows.length">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Date</th>
+        <th>Recommend</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of rows">
+        <td>{{s.firstName}} {{s.lastName}}</td>
+        <td>{{s.email}}</td>
+        <td>{{s.surveyDate}}</td>
+        <td>{{s.recommend}}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-secondary" (click)="edit(s.id)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="remove(s.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && !rows.length" class="alert alert-info">No surveys yet.</div>
+</div>
