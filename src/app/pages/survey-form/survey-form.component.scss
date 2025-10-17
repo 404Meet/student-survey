@@ -1,0 +1,32 @@
+$mason-green: #006633;
+$mason-deep:  #024b36;
+$mason-gold:  #ffb81c;
+$mason-gold-dark: #d49d12;
+
+.mason-nav {
+  background: $mason-green;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  .navbar-brand {
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .brand-g { color: $mason-gold; }
+  .brand-m { color: #fff; margin-left: 2px; }
+
+  .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+
+    &:hover, &.active {
+      color: #fff;
+    }
+  }
+
+  .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.3);
+    .navbar-toggler-icon { filter: invert(1); }
+  }
+}

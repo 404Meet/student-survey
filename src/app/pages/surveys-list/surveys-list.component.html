@@ -1,24 +1,54 @@
+<nav class="navbar navbar-expand-md mason-nav">
+  <div class="container">
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <span class="brand-g">GMU</span>
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#masonNav"
+      aria-controls="masonNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="masonNav" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a routerLink="/" class="nav-link active">Home</a></li>
+        <li class="nav-item"><a routerLink="/survey" class="nav-link">Take Survey</a></li>
+        <li class="nav-item"><a routerLink="/surveys" class="nav-link">All Surveys</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
 <div class="container py-4">
   <h1>All Surveys</h1>
 
-  <a routerLink="/survey" class="btn btn-primary mb-3">+ New Survey</a>
+  <a routerLink="/survey" class="btn btn-success mb-3">+ New Survey</a>
 
-  <table class="table table-bordered" *ngIf="!loading && rows.length">
+  <div *ngIf="loading" class="alert alert-secondary">Loading…</div>
+
+  <div *ngIf="!loading && errorMsg" class="alert alert-danger">
+    {{ errorMsg }}
+  </div>
+
+  <table class="table table-bordered"
+         *ngIf="!loading && (rows?.length ?? 0) > 0">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Date</th>
-        <th>Recommend</th>
-        <th></th>
+        <th>Name</th><th>Email</th><th>Date</th><th>Recommend</th><th></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let s of rows">
-        <td>{{s.firstName}} {{s.lastName}}</td>
-        <td>{{s.email}}</td>
-        <td>{{s.surveyDate}}</td>
-        <td>{{s.recommend}}</td>
+        <td>{{ s.firstName }} {{ s.lastName }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.surveyDate | date:'mediumDate' }}</td>
+        <td>{{ s.recommend }}</td>
         <td>
           <button class="btn btn-sm btn-outline-secondary" (click)="edit(s.id)">Edit</button>
           <button class="btn btn-sm btn-outline-danger" (click)="remove(s.id)">Delete</button>
@@ -27,5 +57,8 @@
     </tbody>
   </table>
 
-  <div *ngIf="!loading && !rows.length" class="alert alert-info">No surveys yet.</div>
+  <div *ngIf="!loading && !errorMsg && (rows?.length ?? 0) === 0"
+       class="alert alert-info">
+    No surveys yet.
+  </div>
 </div>

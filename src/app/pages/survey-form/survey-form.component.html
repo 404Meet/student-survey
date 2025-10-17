@@ -1,54 +1,78 @@
-<div class="container py-4">
-  <h1>Student Survey</h1>
+<nav class="navbar navbar-expand-md mason-nav">
+  <div class="container">
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <span class="brand-g">GMU</span>
+    </a>
 
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <!-- personal info -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#masonNav"
+      aria-controls="masonNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="masonNav" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a routerLink="/" class="nav-link active">Home</a></li>
+        <li class="nav-item"><a routerLink="/survey" class="nav-link">Take Survey</a></li>
+        <li class="nav-item"><a routerLink="/surveys" class="nav-link">All Surveys</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <h1 class="mb-3">Student Survey</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
     <div class="row g-3">
       <div class="col-md-6">
-        <label>First Name *</label>
-        <input formControlName="firstName" class="form-control" />
+        <label class="form-label">First Name *</label>
+        <input class="form-control" formControlName="firstName">
       </div>
       <div class="col-md-6">
-        <label>Last Name *</label>
-        <input formControlName="lastName" class="form-control" />
-      </div>
-
-      <div class="col-md-6">
-        <label>Email *</label>
-        <input type="email" formControlName="email" class="form-control" />
-      </div>
-      <div class="col-md-6">
-        <label>Telephone *</label>
-        <input formControlName="telephone" class="form-control" />
+        <label class="form-label">Last Name *</label>
+        <input class="form-control" formControlName="lastName">
       </div>
 
       <div class="col-md-12">
-        <label>Street *</label>
-        <input formControlName="street" class="form-control" />
+        <label class="form-label">Street *</label>
+        <input class="form-control" formControlName="street">
       </div>
       <div class="col-md-4">
-        <label>City *</label>
-        <input formControlName="city" class="form-control" />
+        <label class="form-label">City *</label>
+        <input class="form-control" formControlName="city">
       </div>
       <div class="col-md-4">
-        <label>State *</label>
-        <input formControlName="state" class="form-control" />
+        <label class="form-label">State *</label>
+        <input class="form-control" formControlName="state">
       </div>
       <div class="col-md-4">
-        <label>ZIP *</label>
-        <input formControlName="zip" class="form-control" />
+        <label class="form-label">ZIP *</label>
+        <input class="form-control" formControlName="zip">
       </div>
-    </div>
 
-    <!-- survey details -->
-    <div class="row g-3 mt-3">
       <div class="col-md-6">
-        <label>Date of Survey *</label>
-        <input type="date" formControlName="surveyDate" class="form-control" />
+        <label class="form-label">Telephone *</label>
+        <input class="form-control" formControlName="telephone">
       </div>
       <div class="col-md-6">
-        <label>Likelihood to Recommend *</label>
-        <select formControlName="recommend" class="form-select">
+        <label class="form-label">Email *</label>
+        <input type="email" class="form-control" formControlName="email">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Survey Date *</label>
+        <input type="date" class="form-control" formControlName="surveyDate">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Likelihood to Recommend *</label>
+        <select class="form-select" formControlName="recommend">
           <option value="" disabled>Select...</option>
           <option>Very Likely</option>
           <option>Likely</option>
@@ -57,56 +81,62 @@
       </div>
     </div>
 
-    <!-- liked checkboxes -->
-    <fieldset class="mt-4">
-      <legend>What did you like most? (≥ 2 required)</legend>
-
-      <div class="row row-cols-2 row-cols-md-3 g-2" formArrayName="liked">
-        <div class="col" *ngFor="let opt of likedOptions; let i = index">
-          <label class="form-check">
-            <input type="checkbox" [formControlName]="i" />
-            {{ opt.label }}
-          </label>
-        </div>
+    <fieldset class="mt-4" formArrayName="liked">
+      <legend class="h6">What did you like most?</legend>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" [formControlName]="0" id="campus">
+        <label class="form-check-label" for="campus">Campus</label>
       </div>
-
-      <div class="text-danger" *ngIf="form.errors?.['likedMin']">
-        Pick at least two.
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" [formControlName]="1" id="dorms">
+        <label class="form-check-label" for="dorms">Dorm Rooms</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" [formControlName]="2" id="students">
+        <label class="form-check-label" for="students">Students</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" [formControlName]="3" id="location">
+        <label class="form-check-label" for="location">Location</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" [formControlName]="4" id="atmosphere">
+        <label class="form-check-label" for="atmosphere">Atmosphere</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" [formControlName]="5" id="sports">
+        <label class="form-check-label" for="sports">Sports</label>
       </div>
     </fieldset>
 
-    <!-- radio buttons -->
     <fieldset class="mt-3">
-      <legend>How did you become interested? *</legend>
-      <div class="d-flex flex-wrap gap-4">
-        <label class="form-check">
-          <input type="radio" class="form-check-input" value="friends" formControlName="interestSource" />
-          Friends
-        </label>
-        <label class="form-check">
-          <input type="radio" class="form-check-input" value="television" formControlName="interestSource" />
-          Television
-        </label>
-        <label class="form-check">
-          <input type="radio" class="form-check-input" value="internet" formControlName="interestSource" />
-          Internet
-        </label>
-        <label class="form-check">
-          <input type="radio" class="form-check-input" value="other" formControlName="interestSource" />
-          Other
-        </label>
+      <legend class="h6">How did you become interested? *</legend>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" formControlName="interestSource" value="friends" id="friends">
+        <label class="form-check-label" for="friends">Friends</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" formControlName="interestSource" value="television" id="television">
+        <label class="form-check-label" for="television">Television</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" formControlName="interestSource" value="internet" id="internet">
+        <label class="form-check-label" for="internet">Internet</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" formControlName="interestSource" value="other" id="other">
+        <label class="form-check-label" for="other">Other</label>
       </div>
     </fieldset>
 
-    <!-- comments -->
     <div class="mt-3">
-      <label>Additional comments</label>
-      <textarea formControlName="comments" rows="3" class="form-control"></textarea>
+      <label class="form-label">Comments</label>
+      <textarea class="form-control" rows="3" formControlName="comments"></textarea>
     </div>
 
-    <div class="mt-4 d-flex gap-3">
-      <button class="btn btn-success" type="submit">Submit</button>
-      <button class="btn btn-outline-secondary" type="button" (click)="cancel()">Cancel</button>
+    <div class="mt-4">
+      <button type="submit" class="btn btn-success me-2">Submit</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
     </div>
   </form>
 </div>

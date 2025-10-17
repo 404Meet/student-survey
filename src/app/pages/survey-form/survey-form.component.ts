@@ -1,37 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormArray, FormBuilder, FormControl, FormGroup, Validators,
-  ReactiveFormsModule
-} from '@angular/forms';
-import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, FormArray, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { SurveyService } from '../../core/survey.service';
 import { Survey } from '../../core/models/survey';
-
-const ALPHA = /^[A-Za-z\s]+$/;
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE = /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
-const ZIP   = /^\d{5}(-\d{4})?$/;
 
 @Component({
   selector: 'app-survey-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],  // ← IMPORTANT
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './survey-form.component.html',
   styleUrls: ['./survey-form.component.scss']
 })
 export class SurveyFormComponent implements OnInit {
   form!: FormGroup;
   editId?: number;
-
-  likedOptions = [
-    { key: 'students',   label: 'Students' },
-    { key: 'location',   label: 'Location' },
-    { key: 'campus',     label: 'Campus' },
-    { key: 'atmosphere', label: 'Atmosphere' },
-    { key: 'dorms',      label: 'Dorm Rooms' },
-    { key: 'sports',     label: 'Sports' },
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -42,18 +25,25 @@ export class SurveyFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      firstName:   ['', [Validators.required, Validators.pattern(ALPHA)]],
-      lastName:    ['', [Validators.required, Validators.pattern(ALPHA)]],
-      street:      ['', [Validators.required]],
-      city:        ['', [Validators.required, Validators.pattern(ALPHA)]],
-      state:       ['', [Validators.required, Validators.pattern(ALPHA)]],
-      zip:         ['', [Validators.required, Validators.pattern(ZIP)]],
-      telephone:   ['', [Validators.required, Validators.pattern(PHONE)]],
-      email:       ['', [Validators.required, Validators.pattern(EMAIL)]],
-      surveyDate:  ['', [Validators.required]],
-      recommend:   ['', [Validators.required]],
-      liked: this.buildLikedArray(),
-      interestSource: ['', [Validators.required]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      street: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      zip: ['', Validators.required],
+      telephone: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      surveyDate: ['', Validators.required],
+      recommend: ['', Validators.required],
+      liked: new FormArray([
+        new FormControl(false, { nonNullable: true }),
+        new FormControl(false, { nonNullable: true }),
+        new FormControl(false, { nonNullable: true }),
+        new FormControl(false, { nonNullable: true }),
+        new FormControl(false, { nonNullable: true }),
+        new FormControl(false, { nonNullable: true }),
+      ]),
+      interestSource: ['', Validators.required],
       comments: ['']
     });
 
@@ -68,49 +58,37 @@ export class SurveyFormComponent implements OnInit {
     return this.form.get('liked') as FormArray<FormControl<boolean>>;
   }
 
-  private buildLikedArray(): FormArray<FormControl<boolean>> {
-    const controls = this.likedOptions.map(
-      () => new FormControl<boolean>(false, { nonNullable: true })
-    );
-    return new FormArray<FormControl<boolean>>(controls);
-  }
-
   private patchFromModel(s: Survey) {
     this.form.patchValue({
       firstName: s.firstName,
-      lastName:  s.lastName,
-      street:    s.street,
-      city:      s.city,
-      state:     s.state,
-      zip:       s.zip,
+      lastName: s.lastName,
+      street: s.street,
+      city: s.city,
+      state: s.state,
+      zip: s.zip,
       telephone: s.telephone,
-      email:     s.email,
-      surveyDate:s.surveyDate,
+      email: s.email,
+      surveyDate: s.surveyDate,
       recommend: s.recommend,
       interestSource: s.interestSource,
-      comments: s.comments ?? ''
+      comments: s.comments
     });
 
-    this.likedOptions.forEach((opt, i) => {
-      const checked = s.liked?.includes(opt.key) ?? false;
-      this.likedArray.at(i).setValue(checked);
+    const likedKeys = ['campus', 'dorms', 'students', 'location', 'atmosphere', 'sports'];
+    likedKeys.forEach((key, i) => {
+      this.likedArray.at(i).setValue(s.liked?.includes(key) ?? false);
     });
-  }
-
-  private atLeastTwoLiked(): boolean {
-    const picked = (this.likedArray.value as boolean[]).filter(v => v).length;
-    return picked >= 2;
   }
 
   submit() {
-    if (!this.atLeastTwoLiked()) {
-      this.form.setErrors({ likedMin: true });
+    if (this.form.invalid) {
+      alert('Please fill all required fields');
       return;
     }
-    if (this.form.invalid) return;
 
-    const likedPicked = (this.likedArray.value as boolean[])
-      .map((v, i) => (v ? this.likedOptions[i].key : null))
+    const likedKeys = ['campus', 'dorms', 'students', 'location', 'atmosphere', 'sports'];
+    const likedPicked = this.likedArray.value
+      .map((v, i) => (v ? likedKeys[i] : null))
       .filter(Boolean) as string[];
 
     const payload: Survey = { ...this.form.getRawValue(), liked: likedPicked };
@@ -119,7 +97,16 @@ export class SurveyFormComponent implements OnInit {
       ? this.svc.update(this.editId, payload)
       : this.svc.create(payload);
 
-    req$.subscribe(() => this.router.navigate(['/surveys']));
+    req$.subscribe({
+      next: () => {
+        alert('Survey submitted successfully!');
+        this.router.navigate(['/surveys']);
+      },
+      error: (err) => {
+        console.error('Save failed:', err);
+        alert(`Save failed: ${err?.status || ''} ${err?.statusText || err?.message || ''}`);
+      }
+    });
   }
 
   cancel() {

@@ -3,6 +3,7 @@ import { SurveyService } from '../../core/survey.service';
 import { Survey } from '../../core/models/survey';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-surveys-list',
@@ -14,6 +15,7 @@ import { CommonModule } from '@angular/common';
 export class SurveysListComponent implements OnInit {
   rows: Survey[] = [];
   loading = true;
+  errorMsg = '';
 
   constructor(private svc: SurveyService, private router: Router) {}
 
@@ -22,10 +24,20 @@ export class SurveysListComponent implements OnInit {
   }
 
   load() {
-    this.svc.getAll().subscribe(data => {
-      this.rows = data;
-      this.loading = false;
-    });
+    this.loading = true;
+    this.errorMsg = '';
+    this.svc.getAll()
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (data) => this.rows = data ?? [],
+        error: (err) => {
+          console.error('Survey fetch failed', err);
+          this.rows = [];
+          this.errorMsg = typeof err?.message === 'string'
+            ? err.message
+            : 'Could not load surveys.';
+        }
+      });
   }
 
   edit(id?: number) {

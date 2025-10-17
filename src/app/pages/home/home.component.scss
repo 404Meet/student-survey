@@ -1,0 +1,87 @@
+$mason-green: #006633;
+$mason-deep:  #024b36;
+$mason-gold:  #ffb81c;
+$mason-gold-dark: #d49d12;
+
+.mason-nav {
+  background: $mason-green;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  .navbar-brand {
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .brand-g { color: $mason-gold; }
+  .brand-m { color: #fff; margin-left: 2px; }
+
+  .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+
+    &:hover, &.active {
+      color: #fff;
+    }
+  }
+
+  .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.3);
+    .navbar-toggler-icon { filter: invert(1); }
+  }
+}
+
+.hero {
+  position: relative;
+  min-height: calc(100vh - 56px);
+  background: url('../../../assets/GMU.jpg') center/cover no-repeat;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 6rem 1rem 4rem;
+}
+
+.mason-btn {
+  background: linear-gradient(to bottom, lighten($mason-gold, 5%), $mason-gold-dark);
+  color: #053321;
+  border: none;
+  border-radius: 0.8rem;
+  padding: 0.8rem 1.4rem;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.mason-btn-outline {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: #fff;
+  border-radius: 0.8rem;
+  padding: 0.8rem 1.4rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-content {
+    padding: 4rem 1rem 2rem;
+  }
+  h1 { font-size: 1.75rem; }
+}

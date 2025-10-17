@@ -5,7 +5,7 @@ import { Survey } from './models/survey';
 
 @Injectable({ providedIn: 'root' })
 export class SurveyService {
-  private baseUrl = 'http://ec2-3-85-18-106.compute-1.amazonaws.com/api/surveys';
+  private baseUrl = '';
 
   constructor(private http: HttpClient) {}
 

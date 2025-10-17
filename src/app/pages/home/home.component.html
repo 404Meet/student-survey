@@ -1,6 +1,41 @@
-<div class="container py-5 text-center">
-  <h1>Welcome</h1>
-  <p class="lead">Please choose an option below.</p>
-  <a routerLink="/survey" class="btn btn-success me-3">Student Survey</a>
-  <a routerLink="/surveys" class="btn btn-outline-primary">List All Surveys</a>
-</div>
+<nav class="navbar navbar-expand-md mason-nav">
+  <div class="container">
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <span class="brand-g">GMU</span>
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#masonNav"
+      aria-controls="masonNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="masonNav" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a routerLink="/" class="nav-link active">Home</a></li>
+        <li class="nav-item"><a routerLink="/survey" class="nav-link">Take Survey</a></li>
+        <li class="nav-item"><a routerLink="/surveys" class="nav-link">All Surveys</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="hero">
+  <div class="overlay"></div>
+
+  <div class="container hero-content text-center">
+    <p class="lead text-white-50 mb-4">
+      Explore student surveys and share your feedback with us.
+    </p>
+
+    <div class="d-flex flex-wrap gap-3 justify-content-center">
+      <a routerLink="/survey" class="btn mason-btn">Student Survey</a>
+      <a routerLink="/surveys" class="btn mason-btn-outline">View Surveys</a>
+    </div>
+  </div>
+</main>
